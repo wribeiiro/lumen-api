@@ -16,7 +16,10 @@
 /*$router->get('/', function () use ($router) {
     return $router->app->version();
 });*/
-$router->group(['prefix' => 'api/v1'], function () use ($router) {
+
+$router->get('/', 'WorkController@index');
+
+$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/work', 'WorkController@index');
     $router->post('/work', 'WorkController@create');
     $router->get('/work/{id}', 'WorkController@show');
