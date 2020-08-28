@@ -13,6 +13,13 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+/*$router->get('/', function () use ($router) {
     return $router->app->version();
+});*/
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+    $router->get('/work', 'WorkController@index');
+    $router->post('/work', 'WorkController@create');
+    $router->get('/work/{id}', 'WorkController@show');
+    $router->put('/work/{id}', 'WorkController@update');
+    $router->delete('/work/{id}', 'WorkController@destroy');
 });
