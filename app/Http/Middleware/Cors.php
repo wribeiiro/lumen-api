@@ -1,30 +1,32 @@
 <?php namespace App\Http\Middleware;
 
-    use Closure;
+use Closure;
 
-    class Cors
-    {
-     /**
+class Cors {
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next) {
+        $headers = [
+            'Access-Control-Allow-Origin'      => '*',
+            'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS, PUT, DELETE',
+            'Access-Control-Allow-Credentials' => 'true',
+            'Access-Control-Max-Age'           => '86400',
+            'Access-Control-Allow-Headers'     => 'Content-Type, Authorization, X-Requested-With'
+        ];
 
-        if ($request->isMethod('OPTIONS')) {
-            $response = response('', 200);
-        } else {
-            // Pass the request to the next middleware
-            $response = $next($request);
-        }
+        if ($request->isMethod('OPTIONS')) 
+            return response()->json('{"method":"OPTIONS"}', 200, $headers);
+        
+        $response = $next($request);
 
-        $response->header('Access-Control-Allow-Methods', 'OPTIONS, HEAD, GET, POST, PUT, PATCH, DELETE');
-        $response->header('Access-Control-Allow-Headers', 'Accept, Content-Type,X-CSRF-TOKEN, Authorization');
-        $response->header('Access-Control-Allow-Origin', '*');
-
+        foreach($headers as $key => $value)
+            $response->header($key, $value);
+        
         return $response;
     }
 }
