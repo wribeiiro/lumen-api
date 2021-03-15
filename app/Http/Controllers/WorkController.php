@@ -8,7 +8,7 @@ use App\Models\WorkModel;
 class WorkController extends Controller {
     
     public function index() {
-        $works = WorkModel::all();
+        $works = WorkModel::orderByDesc('date_deploy')->get();
 
         return response()
             ->json([

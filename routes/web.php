@@ -17,9 +17,9 @@
     return $router->app->version();
 });*/
 
-$router->get('/', 'WorkController@index');
+$router->get('/', ['middleware' => ['auth'], 'uses' => 'WorkController@index']);
 
-$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function () use ($router) {
+$router->group(['prefix' => 'api/v1', 'middleware' => ['auth']], function () use ($router) {
     $router->get('/work', 'WorkController@index');
     $router->post('/work', 'WorkController@create');
     $router->get('/work/{id}', 'WorkController@show');
