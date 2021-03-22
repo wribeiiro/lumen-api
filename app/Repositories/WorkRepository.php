@@ -26,9 +26,9 @@ class WorkRepository
      * find
      *
      * @param integer $id
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \App\Models\Work
      */
-    public function find(int $id): \Illuminate\Database\Eloquent\Collection
+    public function find(int $id): \App\Models\Work
     {
         return Work::find($id);
     }
@@ -37,12 +37,12 @@ class WorkRepository
      * delete
      *
      * @param integer $id
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return App\Models\Work
      */
-    public function delete(int $id): \Illuminate\Database\Eloquent\Collection
+    public function delete(int $id): \App\Models\Work
     {
 
-        $work = $this->model->where('id', $id)->first();
+        $work = Work::find($id);
 
         if ($work !== null) {
             $work->delete();
@@ -62,8 +62,8 @@ class WorkRepository
     {
         $work = $this->model->find($id);
 
-        $work->client       = $workRequest->name;
-        $work->date_deploy  = $workRequest->price;
+        $work->client       = $workRequest->client;
+        $work->date_deploy  = $workRequest->date_deploy;
         $work->description  = $workRequest->description;
         $work->link         = $workRequest->link;
         $work->image        = $workRequest->image;
@@ -81,8 +81,8 @@ class WorkRepository
      */
     public function create(object $workRequest): bool
     {
-        $this->model->client       = $workRequest->name;
-        $this->model->date_deploy  = $workRequest->price;
+        $this->model->client       = $workRequest->client;
+        $this->model->date_deploy  = $workRequest->date_deploy;
         $this->model->description  = $workRequest->description;
         $this->model->link         = $workRequest->link;
         $this->model->image        = $workRequest->image;

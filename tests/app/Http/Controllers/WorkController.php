@@ -1,65 +1,62 @@
 <?php
 
-namespace Tests\Feature;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Work;
+use Faker\Factory;
 
 final class WorkControllerTest extends TestCase
 {
-    use WithFaker;
+    private array $dataFake;
 
     public function setUp(): void
     {
         parent::setUp();
-    }
 
-    public function testShouldReturnWorks()
-    {
-        $works = factory(Work::class, 2)->create();
+        $this->faker = Faker\Factory::create();
 
-        $this->get(route("works"))
-            ->assertStatus(200);
+        $this->dataFake = [
+            'client'        => $this->faker->name,
+            'date_deploy'   => date('Y-m-d'),
+            'description'   => $this->faker->title,
+            'link'          => $this->faker->url,
+            'image'         => $this->faker->imageUrl($width = 640, $height = 480),
+            'class'         => $this->faker->word,
+            'tags'          => $this->faker->word,
+        ];
     }
 
     public function testShouldReturnAWork()
     {
         $work = factory(Work::class)->create();
 
-        $this->get(route("works.show", $work->id))
-            ->assertStatus(200);
+        $this->get("api/v1/work/{$work->id}", ['Authorization' => 'Basic ' . env('APP_API_KEY')]);
+        $this->assertEquals(200, $this->response->status());
     }
 
-    /*public function testShouldDeleteABook()
+    public function testShouldReturnWorks()
     {
-        $book = factory(Book::class)->create();
+        $this->get("api/v1/work", ['Authorization' => 'Basic ' . env('APP_API_KEY')]);
+        $this->assertEquals(200, $this->response->status());
+    }
 
-        $this->delete(route("book.delete", $book->id))
-            ->assertStatus(204);
+    public function testShouldDeleteABook()
+    {
+        $work = factory(Work::class)->create();
+
+        $this->delete("api/v1/work/destroy/{$work->id}", [], ['Authorization' => 'Basic ' . env('APP_API_KEY')]);
+        $this->assertEquals(204, $this->response->status());
     }
 
     public function testShouldSaveABook()
     {
-        $data = [
-            "name"   => $this->faker->streetName,
-            "author" => $this->faker->name()
-        ];
-
-        $this->post(route("book.add"), $data)
-            ->assertStatus(201);
+        $this->post("api/v1/work/create", $this->dataFake, ['Authorization' => 'Basic ' . env('APP_API_KEY')]);
+        $this->assertEquals(201, $this->response->status());
     }
 
     public function testShouldUpdateABook()
     {
-        $book = factory(Book::class)->create();
+        $work = factory(Work::class)->create();
 
-        $data = [
-            'name'   => $this->faker->streetName,
-            'author' => $this->faker->name()
-        ];
-
-        $this->put(route("book.update", $book->id), $data)
-            ->assertStatus(200);
-    }*/
+        $this->put("api/v1/work/update/{$work->id}", $this->dataFake, ['Authorization' => 'Basic ' . env('APP_API_KEY')]);
+        $this->assertEquals(200, $this->response->status());
+    }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\WorkModel;
+use App\Validations\WorkValidation;
 use App\Services\WorkService;
 
 class WorkController extends Controller
@@ -39,14 +39,11 @@ class WorkController extends Controller
         $response['code'] = 201;
         $response['data'] = [];
 
+        //$validate = $this->validate($request, WorkValidation::validate());
+
         try {
             $result           = $this->work_service->create($request);
             $response['data'] = $result;
-
-            if (isset($result['code']) && !empty($result['code'])) {
-                $response         = $result;
-                $response['data'] = $result['data'];
-            }
         } catch (\Exception $e) {
             $response['code'] = 500;
             $response['data'] = $e->getMessage();
@@ -73,14 +70,11 @@ class WorkController extends Controller
         $response['code'] = 200;
         $response['data'] = [];
 
+        //$validate = $this->validate($request, WorkValidation::validate());
+
         try {
             $result           = $this->work_service->update($request, (int) $id);
             $response['data'] = $result;
-
-            if (isset($result['code']) && !empty($result['code'])) {
-                $response         = $result;
-                $response['data'] = $result['data'];
-            }
         } catch (\Exception $e) {
             $response['code'] = 500;
             $response['data'] = $e->getMessage();

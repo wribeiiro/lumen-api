@@ -33,7 +33,7 @@ $router->group(['prefix' => 'api/v1', 'middleware' => ['auth']], function () use
     $router->get('/', 'WorkController@index');
     $router->get('/work', 'WorkController@index');
     $router->get('/work/{id}', 'WorkController@show');
-    $router->post('/work', 'WorkController@create');
-    $router->put('/work/{id}', 'WorkController@update');
-    $router->delete('/work/{id}', 'WorkController@destroy');
+    $router->post('/work/create', 'WorkController@create');
+    $router->put('/work/update/{id}', 'WorkController@update');
+    $router->delete('/work/destroy/{id}', 'WorkController@destroy');
 });

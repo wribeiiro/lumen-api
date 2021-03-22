@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Repositories\WorkRepository;
-use App\Validations\WorkValidation;
 
 class WorkService
 {
@@ -22,8 +21,6 @@ class WorkService
 
     public function create(Request $request)
     {
-        $request->validate(WorkValidation::validate());
-
         return $this->repository->create($request);
     }
 
@@ -38,8 +35,6 @@ class WorkService
 
     public function update(Request $request, $id)
     {
-        $request->validate(WorkValidation::validate());
-
         return $this->repository->update($request, $id);
     }
 
