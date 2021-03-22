@@ -2,7 +2,7 @@
 
 namespace App\Validations;
 
-class WorkValidation
+final class WorkValidation
 {
     public static function validate()
     {
