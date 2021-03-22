@@ -34,8 +34,9 @@ class AuthServiceProvider extends ServiceProvider
             $header = $request->header('Authorization');
             $header = explode("Basic ", $header);
 
-            if (isset($header[1]) && $header[1] === env('APP_API_KEY')) 
+            if (isset($header[1]) && $header[1] === env('APP_API_KEY')) {
                 return new User();
+            }
 
             return null;
         });

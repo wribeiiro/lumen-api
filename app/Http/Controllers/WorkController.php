@@ -4,81 +4,102 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\WorkModel;
+use App\Services\WorkService;
 
-class WorkController extends Controller {
-    
-    public function index() {
-        $works = WorkModel::orderByDesc('date_deploy')->get();
+class WorkController extends Controller
+{
+    /**
+     * work_service
+     *
+     * @property WorkService
+     */
+    private $work_service;
 
-        return response()
-            ->json([
-                'body' => $works,
-                'code' => 200
-            ], 200);
+    public function __construct(WorkService $workService)
+    {
+        $this->work_service = $workService;
     }
 
-    public function create(Request $request) {
-        $work = new WorkModel;
+    public function index()
+    {
+        try {
+            $response['code'] = 200;
+            $response['data'] =  $this->work_service->show();
+        } catch (\Exception $e) {
+            $response['code'] = 500;
+            $response['data'] = $e->getMessage();
+        }
 
-        $work->client       = $request->name;
-        $work->date_deploy  = $request->price;
-        $work->description  = $request->description;
-        $work->link         = $request->link;
-        $work->image        = $request->image;
-        $work->class        = $request->class;
-        $work->tags         = $request->tags;
-        
-        $request->validate(WorkModel::validate());
-        
-        $work->save();
-
-        return response()
-            ->json([
-                'body' => $work,
-                'code' => 201
-            ], 201);
+        return response()->json($response, $response['code']);
     }
 
-    public function show($id) {
-        $work = WorkModel::find($id);
+    public function create(Request $request)
+    {
 
-        return response()
-            ->json([
-                'body' => $work,
-                'code' => 200
-            ], 200);
+        $response['code'] = 201;
+        $response['data'] = [];
+
+        try {
+            $result           = $this->work_service->create($request);
+            $response['data'] = $result;
+
+            if (isset($result['code']) && !empty($result['code'])) {
+                $response         = $result;
+                $response['data'] = $result['data'];
+            }
+        } catch (\Exception $e) {
+            $response['code'] = 500;
+            $response['data'] = $e->getMessage();
+        }
+
+        return response()->json($response, $response['code']);
     }
 
-    public function update(Request $request, $id) { 
-        $work= WorkModel::find($id);
-        
-        $work->client      = $request->name;
-        $work->date_deploy = $request->price;
-        $work->description = $request->description;
-        $work->link        = $request->link;
-        $work->image       = $request->image;
-        $work->class       = $request->class;
-        $work->tags        = $request->tags;
+    public function show($id)
+    {
+        try {
+            $response['code'] = 200;
+            $response['data'] =  $this->work_service->show($id);
+        } catch (\Exception $e) {
+            $response['code'] = 500;
+            $response['data'] = $e->getMessage();
+        }
 
-        $request->validate(WorkModel::validate());
-        
-        $work->save();
-
-        return response()
-            ->json([
-                'body' => $work,
-                'code' => 200
-            ], 200);
+        return response()->json($response, $response['code']);
     }
 
-    public function destroy($id) {
-        $work = WorkModel::find($id);
-        $work->delete();
+    public function update(Request $request, $id)
+    {
+        $response['code'] = 200;
+        $response['data'] = [];
 
-        return response()
-            ->json([
-                'body' => $work,
-                'code' => 204
-            ], 204);
+        try {
+            $result           = $this->work_service->update($request, (int) $id);
+            $response['data'] = $result;
+
+            if (isset($result['code']) && !empty($result['code'])) {
+                $response         = $result;
+                $response['data'] = $result['data'];
+            }
+        } catch (\Exception $e) {
+            $response['code'] = 500;
+            $response['data'] = $e->getMessage();
+        }
+
+        return response()->json($response, $response['code']);
+    }
+
+    public function destroy($id)
+    {
+
+        try {
+            $response['code'] = 204;
+            $response['data'] = $this->work_service->destroy((int) $id);
+        } catch (\Exception $e) {
+            $response['code'] = 500;
+            $response['data'] = $e->getMessage();
+        }
+
+        return response()->json($response, $response['code']);
     }
 }

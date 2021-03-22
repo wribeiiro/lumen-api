@@ -13,7 +13,7 @@
 |
 */
 
-$app = require __DIR__.'/../lumen-api/bootstrap/app.php';
+$app = require __DIR__ . '/../lumen-api/bootstrap/app.php';
 /*
 |--------------------------------------------------------------------------
 | Run The Application

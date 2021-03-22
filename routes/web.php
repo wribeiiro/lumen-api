@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Http\Response;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -17,12 +19,21 @@
     return $router->app->version();
 });*/
 
+/*
+$router->options('/{any:.*}', [
+    'middleware' => ['cors'], function () {
+        return response('OK', Response::HTTP_OK);
+    }
+]);
+*/
+
 $router->get('/', ['middleware' => ['auth'], 'uses' => 'WorkController@index']);
 
 $router->group(['prefix' => 'api/v1', 'middleware' => ['auth']], function () use ($router) {
+    $router->get('/', 'WorkController@index');
     $router->get('/work', 'WorkController@index');
-    $router->post('/work', 'WorkController@create');
     $router->get('/work/{id}', 'WorkController@show');
+    $router->post('/work', 'WorkController@create');
     $router->put('/work/{id}', 'WorkController@update');
     $router->delete('/work/{id}', 'WorkController@destroy');
 });
