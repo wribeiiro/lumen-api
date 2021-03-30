@@ -19,7 +19,7 @@ class WorkRepository
      */
     public function findAll(): \Illuminate\Database\Eloquent\Collection
     {
-        return Work::orderByDesc('date_deploy')->get();
+        return Work::orderByDesc('id')->get();
     }
 
     /**
@@ -62,13 +62,11 @@ class WorkRepository
     {
         $work = $this->model->find($id);
 
-        $work->client       = $workRequest->client;
-        $work->date_deploy  = $workRequest->date_deploy;
-        $work->description  = $workRequest->description;
-        $work->link         = $workRequest->link;
-        $work->image        = $workRequest->image;
-        $work->class        = $workRequest->class;
-        $work->tags         = $workRequest->tags;
+        $work->name = $workRequest->name;
+        $work->description = $workRequest->description;
+        $work->link = $workRequest->link;
+        $work->image = $workRequest->image;
+        $work->tags = $workRequest->tags;
 
         return $work->save();
     }
@@ -81,13 +79,11 @@ class WorkRepository
      */
     public function create(object $workRequest): bool
     {
-        $this->model->client       = $workRequest->client;
-        $this->model->date_deploy  = $workRequest->date_deploy;
-        $this->model->description  = $workRequest->description;
-        $this->model->link         = $workRequest->link;
-        $this->model->image        = $workRequest->image;
-        $this->model->class        = $workRequest->class;
-        $this->model->tags         = $workRequest->tags;
+        $this->model->name = $workRequest->name;
+        $this->model->description = $workRequest->description;
+        $this->model->link = $workRequest->link;
+        $this->model->image = $workRequest->image;
+        $this->model->tags = $workRequest->tags;
 
         return $this->model->save();
     }

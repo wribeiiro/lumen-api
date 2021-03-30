@@ -20,7 +20,7 @@ class Work extends Model
      * @var array
      */
     protected $fillable = [
-        'client', 'description', 'link', 'image', 'class', 'tags'
+        'name', 'description', 'link', 'image', 'tags'
     ];
 
     /**

@@ -14,12 +14,10 @@ final class WorkControllerTest extends TestCase
         $this->faker = Faker\Factory::create();
 
         $this->dataFake = [
-            'client'        => $this->faker->name,
-            'date_deploy'   => date('Y-m-d'),
+            'name'        => $this->faker->name,
             'description'   => $this->faker->title,
             'link'          => $this->faker->url,
             'image'         => $this->faker->imageUrl($width = 640, $height = 480),
-            'class'         => $this->faker->word,
             'tags'          => $this->faker->word,
         ];
     }
